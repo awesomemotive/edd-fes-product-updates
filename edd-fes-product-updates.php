@@ -42,6 +42,8 @@ class EDD_FES_Product_Updates {
 		add_filter( 'fes_vendor_dashboard_menu', array( $this, 'register_email_menu' ) );
 		add_filter( 'fes_signal_custom_task', array( $this, 'register_dashboard_task' ), 10, 2 );
 		add_action( 'fes_custom_task_email_customers', array( $this, 'render_email_tab' ) );
+		add_action( 'edd_fes_create_email', array( $this, 'process_vendor_email_submission' ) );
+
 	}
 
 	public function includes() {
@@ -91,6 +93,69 @@ class EDD_FES_Product_Updates {
 
 	public function render_email_tab() {
 		edd_get_template_part( 'fes', 'email-customers-tab' );
+	}
+
+	public function process_vendor_email_submission( $data ) {
+
+		if( ! current_user_can( 'edit_shop_payments' ) && ! EDD_FES()->vendors->is_vendor( get_current_user_id() ) ) {
+			wp_die( __( 'You do not have permission to submit email updates', 'edd-fes-product-updates' ), __( 'Error', 'edd-fes-product-updates' ), array( 'response' => 401 ) );
+		}
+
+		if( ! wp_verify_nonce( $data['edd_fes_create_email'], 'edd_fes_create_email' ) ) {
+			wp_die( __( 'Nonce verification has failed', 'edd-fes-product-updates' ), __( 'Error', 'edd-fes-product-updates' ), array( 'response' => 401 ) );
+		}
+
+		if( empty( $data['fes-email-products'] ) ) {
+			wp_die( __( 'Please select at least one product', 'edd-fes-product-updates' ), __( 'Error', 'edd-fes-product-updates' ), array( 'response' => 401 ) );
+		}
+
+		if( empty( $data['fes-email-subject'] ) ) {
+			wp_die( __( 'Please enter a subject for the email', 'edd-fes-product-updates' ), __( 'Error', 'edd-fes-product-updates' ), array( 'response' => 401 ) );
+		}
+
+		if( empty( $data['fes-email-message'] ) ) {
+			wp_die( __( 'Please enter a message for the email', 'edd-fes-product-updates' ), __( 'Error', 'edd-fes-product-updates' ), array( 'response' => 401 ) );
+		}
+
+		$products = $data['fes-email-products'];
+
+		// Verify all included products belong to the current user
+		foreach( $products as $key => $product_id ) {
+			$product = get_post( $product_id );
+			if( (int) get_current_user_id() !== (int) $product->post_author ) {
+				unset( $products[ $key ] );
+			}
+		}
+
+		// Re-verify there are products
+		if( empty( $products ) ) {
+			wp_die( __( 'Please select at least one product', 'edd-fes-product-updates' ), __( 'Error', 'edd-fes-product-updates' ), array( 'response' => 401 ) );
+		}
+
+		$author     = get_userdata( get_current_user_id() );
+		$subject    = sanitize_text_field( $data['fes-email-subject'] );
+		$message    = sanitize_text_field( $data['fes-email-message'] );
+		$from_name  = $author->display_name;
+		$from_email = $author->user_email;
+
+		$args = array(
+			'post_type'    => 'edd_pup_email',
+			'post_status'  => 'draft',
+			'post_content' => $message,
+			'post_excerpt' => $subject,
+			'post_title'   => sprintf( __( 'Vendor #%d: %s', 'edd-fes-product-updates' ), $author->ID, $subject ),
+		);
+
+		$email_id   = wp_insert_post( $args );
+		$recipients = edd_pup_customer_count( $email_id, $products );
+		
+		update_post_meta( $email_id, '_edd_pup_subject', $subject );
+		update_post_meta( $email_id, '_edd_pup_message', $message );
+		update_post_meta( $email_id, '_edd_pup_from_name', $from_name );
+		update_post_meta( $email_id, '_edd_pup_from_email', $from_email );
+		update_post_meta( $email_id, '_edd_pup_updated_products', $products );
+		update_post_meta( $email_id, '_edd_pup_recipients', $recipients );
+
 	}
 
 }
