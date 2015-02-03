@@ -156,6 +156,21 @@ class EDD_FES_Product_Updates {
 		update_post_meta( $email_id, '_edd_pup_updated_products', $products );
 		update_post_meta( $email_id, '_edd_pup_recipients', $recipients );
 
+		$this->notify_admins( $email_id, $author );
+
+	}
+
+	private function notify_admins( $email_id = 0, $author = OBJECT ) {
+
+		$subject = __( 'New Product Update Email Submitted', 'edd-fes-product-updates' );
+		$message = sprintf(
+			__( 'A new product update email has been submitted by a %s. Click <a href="%s">here</a> to review the email.', 'edd-fes-product-updates' ),
+			$author->display_name,
+			admin_url( 'edit.php?post_type=download&page=edd-prod-updates&view=edit_pup_email&id=' . $email_id )
+		);
+
+		EDD()->emails->send( edd_get_admin_notice_emails(), $subject, $message );
+
 	}
 
 }
