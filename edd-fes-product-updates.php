@@ -46,6 +46,8 @@ class EDD_FES_Product_Updates {
 
 	public function includes() {
 
+		include $this->plugin_dir . 'includes/functions.php';
+
 	}
 
 	public function register_template_path( $paths ) {
