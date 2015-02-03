@@ -38,12 +38,57 @@ class EDD_FES_Product_Updates {
 
 		$this->includes();
 
+		add_filter( 'edd_template_paths', array( $this, 'register_template_path' ) );
+		add_filter( 'fes_vendor_dashboard_menu', array( $this, 'register_email_menu' ) );
+		add_filter( 'fes_signal_custom_task', array( $this, 'register_dashboard_task' ), 10, 2 );
+		add_action( 'fes_custom_task_email_customers', array( $this, 'render_email_tab' ) );
 	}
 
 	public function includes() {
 
+	}
 
+	public function register_template_path( $paths ) {
 
+		$paths[49] = trailingslashit( $this->plugin_dir ) . 'templates/';
+		return $paths;
+	}
+
+	public function register_email_menu( $menu_items = array() ) {
+
+		if( isset( $menu_items['logout'] ) ) {
+
+			// Remove logout
+			$logout = $menu_items['logout'];
+			unset( $menu_items['logout'] );
+		}
+
+		$menu_items['emails'] = array(
+			"icon" => "envelope",
+			"task" => array( 'email_customers' ),
+			"name" => __( 'Email Customers', 'edd-fes-product-updates' ),
+		);
+
+		if( isset( $logout ) ) {
+
+			// Re-add logout so it remains at the end
+			$menu_items['logout'] = $logout;
+		}
+
+		return $menu_items;
+	}
+
+	public function register_dashboard_task( $custom, $task ) {
+		
+		if( 'email_customers' == $task ) {
+			$custom = 'email_customers';
+		}
+
+		return $custom;
+	}
+
+	public function render_email_tab() {
+		edd_get_template_part( 'fes', 'email-customers-tab' );
 	}
 
 }
