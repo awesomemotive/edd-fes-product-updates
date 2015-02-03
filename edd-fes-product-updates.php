@@ -137,6 +137,7 @@ class EDD_FES_Product_Updates {
 		$message    = sanitize_text_field( $data['fes-email-message'] );
 		$from_name  = $author->display_name;
 		$from_email = $author->user_email;
+		$auto_send  = $this->auto_send( $author->ID );
 
 		$args = array(
 			'post_type'    => 'edd_pup_email',
@@ -156,7 +157,15 @@ class EDD_FES_Product_Updates {
 		update_post_meta( $email_id, '_edd_pup_updated_products', $products );
 		update_post_meta( $email_id, '_edd_pup_recipients', $recipients );
 
-		$this->notify_admins( $email_id, $author );
+		if( $auto_send ) {
+
+			
+
+		} else {
+
+			$this->notify_admins( $email_id, $author );
+
+		}
 
 	}
 
@@ -171,6 +180,11 @@ class EDD_FES_Product_Updates {
 
 		EDD()->emails->send( edd_get_admin_notice_emails(), $subject, $message );
 
+	}
+
+	private function auto_send( $author_id = 0 ) {
+		$ret = get_post_meta( $author_id, '_edd_fes_pu_auto_send', true );
+		return (bool) apply_filters( 'edd_fes_product_updates_auto_send', $ret, $author_id );
 	}
 
 }
