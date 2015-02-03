@@ -42,7 +42,7 @@ class EDD_FES_Product_Updates {
 
 	public function includes() {
 
-		
+
 
 	}
 
@@ -65,4 +65,4 @@ function edd_fes_load_product_updates() {
 	$instance = new EDD_FES_Product_Updates;
 
 }
-add_action( 'plugins_loaded', 'edd_fes_load_product_updates' );
+add_action( 'plugins_loaded', 'edd_fes_load_product_updates', 9999 );
