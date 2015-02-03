@@ -33,8 +33,8 @@ class EDD_FES_Product_Updates {
 
 	public function __construct() {
 
-		$this->plugin_dir = plugin_dir_path( __FILE__ ) );
-		$this->plugin_url = plugin_dir_url( __FILE__ ) );
+		$this->plugin_dir = plugin_dir_path( __FILE__ );
+		$this->plugin_url = plugin_dir_url( __FILE__ );
 
 		$this->includes();
 
