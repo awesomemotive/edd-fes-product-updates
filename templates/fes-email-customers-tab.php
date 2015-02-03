@@ -29,6 +29,8 @@
 	<fieldset>
 
 		<p>
+			<?php wp_nonce_field( 'edd_fes_create_email', 'edd_fes_create_email' ); ?>
+			<input type="hidden" name="edd_action" value="fes_create_email"/>
 			<input type="submit" name="fes-email-submit" value="<?php _e( 'Submit Email for Review', 'edd-fes-product-updates' ); ?>"/>
 
 		</p>
