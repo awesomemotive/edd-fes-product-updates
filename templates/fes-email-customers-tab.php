@@ -23,7 +23,7 @@
 
 		<p>
 			<label for="fes-email-message"><?php _e( 'Email Message', 'edd-fes-product-updates' ); ?></label>
-			<textarea name="fes-email-message" id="fes-email-message"></textarea>
+			<textarea name="fes-email-message" id="fes-email-message" rows="10"></textarea>
 		</p>
 
 		<p class="edd-fes-product-updates-tag-list">
