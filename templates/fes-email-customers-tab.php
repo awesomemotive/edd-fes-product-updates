@@ -1,6 +1,8 @@
 <form id="edd-fes-product-updates" method="POST">
-	<p><?php _e( 'Use this page to send an email to customers of one or more of your products', 'edd-fes-product-updates' ); ?></p>
-
+	<p><?php _e( 'Use this page to send an email to customers of one or more of your products.', 'edd-fes-product-updates' ); ?></p>
+	<?php if( edd_fes_pu_has_pending_emails() ) : ?>
+		<p class="edd-fes-product-updates-pending"><?php printf( __( 'You have %d pending emails awaiting review by site administrators.', 'edd-fes-product-updates' ), edd_fes_pu_pending_emails_count() ); ?></p> 
+	<?php endif; ?>
 	<fieldset>
 
 		<p>
