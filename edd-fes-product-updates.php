@@ -163,7 +163,7 @@ class EDD_FES_Product_Updates {
 
 		$author     = get_userdata( get_current_user_id() );
 		$subject    = sanitize_text_field( $data['fes-email-subject'] );
-		$message    = sanitize_text_field( $data['fes-email-message'] ) . "\n\n" . edd_get_option( 'fes_pu_default_footer' );
+		$message    = wp_kses_post( $data['fes-email-message'] . "\n\n" . edd_get_option( 'fes_pu_default_footer' ) );
 		$from_name  = $author->display_name;
 		$from_email = $author->user_email;
 		$auto_send  = $this->auto_send( $author->ID );
