@@ -41,6 +41,7 @@ class EDD_FES_Product_Updates {
 		add_filter( 'edd_template_paths', array( $this, 'register_template_path' ) );
 		add_filter( 'fes_vendor_dashboard_menu', array( $this, 'register_email_menu' ) );
 		add_filter( 'fes_signal_custom_task', array( $this, 'register_dashboard_task' ), 10, 2 );
+		add_filter( 'edd_settings_emails', array( $this, 'settings' ) );
 		add_action( 'fes_custom_task_email_customers', array( $this, 'render_email_tab' ) );
 		add_action( 'edd_fes_create_email', array( $this, 'process_vendor_email_submission' ) );
 
@@ -91,6 +92,26 @@ class EDD_FES_Product_Updates {
 		return $custom;
 	}
 
+	public function settings( $settings ) {
+
+
+		$settings['fes_pu_settings'] = array(
+			'id' => 'fes_pu_settings',
+			'name' => '<strong>' . __( 'FES Product Updates', 'edd-fes-product-updates' ) . '</strong>',
+			'desc' => __( 'Configure the options for FES Product Updates', 'edd-fes-product-updates' ),
+			'type' => 'header'
+		);
+
+		$settings['fes_pu_default_footer'] = array(
+			'id' => 'fes_pu_default_footer',
+			'name' => __( 'Default Email Footer Content', 'edd-fes-product-updates' ),
+			'desc' => __( 'Content entered here will be automatically appended to the bottom of emails created by vendors', 'edd-fes-product-updates' ),
+			'type' => 'textarea'
+		);
+
+		return $settings;
+	}
+
 	public function render_email_tab() {
 		edd_get_template_part( 'fes', 'email-customers-tab' );
 	}
@@ -134,7 +155,7 @@ class EDD_FES_Product_Updates {
 
 		$author     = get_userdata( get_current_user_id() );
 		$subject    = sanitize_text_field( $data['fes-email-subject'] );
-		$message    = sanitize_text_field( $data['fes-email-message'] );
+		$message    = sanitize_text_field( $data['fes-email-message'] ) . "\n\n" . edd_get_option( 'fes_pu_default_footer' );
 		$from_name  = $author->display_name;
 		$from_email = $author->user_email;
 		$auto_send  = $this->auto_send( $author->ID );
