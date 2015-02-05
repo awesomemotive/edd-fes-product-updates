@@ -30,6 +30,7 @@
 			</p>
 
 			<p class="edd-fes-product-updates-tag-list">
+				<span><?php _e( 'The following placeholders may be used in your email', 'edd-fes-product-updates' ); ?></span><br/>
 				<?php foreach ( edd_fes_pu_get_enabled_email_tags() as $tag => $description ): ?>
 					<small class="edd-fes-product-updates-tag"><strong>{<?php echo $tag;?>}</strong></small>
 					<small class="edd-fes-product-updates-tag-description"><?php echo $description;?></small><br/>
