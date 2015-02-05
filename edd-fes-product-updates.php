@@ -118,7 +118,7 @@ class EDD_FES_Product_Updates {
 
 	public function process_vendor_email_submission( $data ) {
 
-		if( ! current_user_can( 'edit_shop_payments' ) && ! EDD_FES()->vendors->is_vendor( get_current_user_id() ) ) {
+		if( ! current_user_can( 'edit_shop_payments' ) && ! EDD_FES()->vendors->vendor_is_vendor( get_current_user_id() ) ) {
 			wp_die( __( 'You do not have permission to submit email updates', 'edd-fes-product-updates' ), __( 'Error', 'edd-fes-product-updates' ), array( 'response' => 401 ) );
 		}
 
