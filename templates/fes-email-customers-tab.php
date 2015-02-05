@@ -30,9 +30,9 @@
 			</p>
 
 			<p class="edd-fes-product-updates-tag-list">
-				<?php foreach ( edd_get_email_tags() as $tag ): ?>
-					<small class="edd-fes-product-updates-tag"><strong>{<?php echo $tag['tag'];?>}</strong></small>
-					<small class="edd-fes-product-updates-tag-description"><?php echo $tag['description'];?></small><br/>
+				<?php foreach ( edd_fes_pu_get_enabled_email_tags() as $tag => $description ): ?>
+					<small class="edd-fes-product-updates-tag"><strong>{<?php echo $tag;?>}</strong></small>
+					<small class="edd-fes-product-updates-tag-description"><?php echo $description;?></small><br/>
 				<?php endforeach;?>
 			</p>
 

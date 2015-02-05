@@ -43,3 +43,32 @@ function edd_fes_pu_pending_emails_count( $author_id = 0 ) {
 	return $query->post_count;
 
 }
+
+function edd_fes_pu_get_email_tags() {
+
+	$tags = array();
+
+	foreach( edd_get_email_tags() as $tag ) {
+
+		$tags[ $tag['tag'] ] = '{' . $tag['tag'] . '}';
+
+	}
+
+	return $tags;
+}
+
+function edd_fes_pu_get_enabled_email_tags() {
+
+	$tags    = edd_fes_pu_get_email_tags();
+	$enabled = edd_get_option( 'fes_pu_tags', array() );
+
+	foreach( $tags as $key => $tag ) {
+
+		if( ! array_key_exists( $key, $enabled ) ) {
+			unset( $tags[ $key ] );
+		}
+
+	}
+
+	return $tags;
+}

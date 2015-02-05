@@ -109,6 +109,14 @@ class EDD_FES_Product_Updates {
 			'type' => 'textarea'
 		);
 
+		$settings['fes_pu_tags'] = array(
+			'id' => 'fes_pu_tags',
+			'name' => __( 'Email Tags', 'edd-fes-product-updates' ),
+			'desc' => __( 'Select the email tags that are shown to vendors as options', 'edd-fes-product-updates' ),
+			'type' => 'multicheck',
+			'options' => edd_fes_pu_get_email_tags()
+		);
+
 		return $settings;
 	}
 
