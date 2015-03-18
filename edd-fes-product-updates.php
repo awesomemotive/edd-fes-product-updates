@@ -20,7 +20,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Easy Digital Downloads. If not, see <http://www.gnu.org/licenses/>.
+ * along with Easy Digital Downloads Frontend Submissions Product Updates. If not, see <http://www.gnu.org/licenses/>.
  */
 
 // Exit if accessed directly
