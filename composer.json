@@ -1,0 +1,17 @@
+{
+    "name": "easydigitaldownloads/fes-product-updates",
+    "type": "wordpress-plugin",
+    "description": "FES Product Updates Extension for EDD",
+    "keywords": [ "edd", "fes", "product-updates", "plugin"],
+    "homepage": "http://easydigitaldownloads.com",
+    "authors": [
+        {
+            "name": "Pippin Williamson",
+            "email": "pippin@pippinsplugins.com",
+            "homepage": "http://pippinsplugins.com"
+        }
+    ],
+    "require": {
+        "composer/installers": "~1.0.6"
+    }
+}
